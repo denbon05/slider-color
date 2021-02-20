@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="./style.css">
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script>
+		let bgColor = '#000000';
+		let changedElProp = 'background-color';
+		const setColor = ((sliderColor = bgColor) => (color, range) => {
+			if (range.length === 1) range = `0${range}`;
+			const hex = [bgColor.slice(1, 3), bgColor.slice(3, 5), bgColor.slice(5)];
+			switch (color) {
+				case 'red':
+					bgColor = `#${hex[0] = range}${hex[1]}${hex[2]}`;
+					return `#${range}${sliderColor.slice(3)}`;
+				case 'green':
+					bgColor = `#${hex[0]}${hex[1] = range}${hex[2]}`;
+					return `#${sliderColor.slice(1, 3)}${range}${sliderColor.slice(5)}`;;
+				case 'blue':
+					bgColor = `#${hex[0]}${hex[1]}${hex[2] = range}`;
+					return `#${sliderColor.slice(1, 5)}${range}`;
+				default: throw Error(`Unknow color: ${color}`);
+			}
+		})();
+
+		const elements = [
+			{ id: '#slider1', color: 'red' },
+			{ id: '#slider2', color: 'green' },
+			{ id: '#slider3', color: 'blue' },
+		];
+
+		elements.forEach(({ id, color }) => {
+			$(() => {
+				$(id).slider({
+					min: 0,
+					max: 255,
+					slide: (event, ui) => {
+						const range = ui.value.toString(16);
+						$(id).css('background-color', setColor(color, range));
+						$('.text-container').css(changedElProp, bgColor);
+					}
+				});
+			})
+		});
+		</script>
+	<title>Slider color</title>
+</head>
+<body>
+	<fieldset class="fieldset">
+		<legend class="legend">Select:</legend>
+		<nav class="nav">
+			<button id="textColor" class="nav-btn">
+				color
+			</button>
+			<button id="backgroundColor" class="nav-btn active">
+				backgroundColor
+			</button>
+		</nav>
+	</fieldset>
+	<main class="content">
+		<section class="content-item sliders">
+			<div class="slider" id="slider1"></div>
+			<div class="slider" id="slider2"></div>
+			<div class="slider" id="slider3"></div>
+		</section>
+		<section class="content-item text-container">
+			<p id="text">
+				Etiam libero neque, luctus a:
+				eleifend nec: semper atz lorem_
+				Sed pede. Nulla lorem metus:
+				adipiscing ut: luctus sed,
+				hendrent vitae: mi.
+			</p>
+		</section>
+	</main>
+	<script>
+		const changeColor = {
+			textColor: 'color',
+			backgroundColor: 'background-color',
+		};
+
+		$('.nav-btn').each((_i, el) => {
+			$(el).click(() => {
+				const idDeactiveBtn = el.id == 'textColor' ? 'backgroundColor' : 'textColor';
+				$(el).addClass('active');
+				$(`#${idDeactiveBtn}`).removeClass('active');
+				changedElProp = changeColor[el.id];
+				console.log('changedElColor=>', changedElProp);
+			})
+		});
+	</script>
+</body>
+</html>

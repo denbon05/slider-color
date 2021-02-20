@@ -1,1 +1,1 @@
-# slider-color
+# Slider-color
